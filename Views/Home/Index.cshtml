@@ -4,5 +4,12 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p><a asp-controller="Products" asp-action="Index">Go to products</a></p>
+
+    <h4 class="mt-5">Admin</h4>
+    <!-- The key is sent in the request body (POST), not in the URL -->
+    <form method="post" action="/users/index" class="form-inline justify-content-center">
+        <input type="password" name="key" placeholder="Admin key" class="form-control mr-2" />
+        <input type="submit" value="Show users" class="btn btn-secondary" />
+    </form>
 </div>

@@ -1,33 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ProductsWithRouting.Models;
-using System.Diagnostics;
 using ProductsWithRouting.Services;
 
 namespace ProductsWithRouting.Controllers
 {
     public class UsersController : Controller
     {
-        private List<User> myUsers;
+        private const string AdminKey = "df2323eoT";
+
+        private readonly List<User> myUsers;
 
         public UsersController(Data data)
         {
             myUsers = data.Users;
         }
 
-        public IActionResult Index(string id)
+        // URL is always /users/index. The key is read ONLY from the request body (form),
+        // never from route or query string.
+        [HttpPost]
+        public IActionResult Index([FromForm(Name = "key")] string key)
         {
+            if (key != AdminKey)
+            {
+                return Unauthorized();
+            }
             return View(myUsers);
         }
 
-        public IActionResult Error()
+        // A plain GET has no body, so there is no key -> unauthorized
+        [HttpGet]
+        public IActionResult Index()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return Unauthorized();
         }
-
     }
 }
